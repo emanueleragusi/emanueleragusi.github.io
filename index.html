@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emanuele Ragusi | Engineer & Tech Enthusiast</title>
+    <meta name="description" content="Emanuele Ragusi — Management Engineering student focused on process analysis, automation and AI.">
+    <title>Emanuele Ragusi | Management Engineering &amp; Technology</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -20,408 +20,622 @@
                         mono: ['JetBrains Mono', 'monospace'],
                     },
                     colors: {
-                        dark: '#0f0f11',
-                        card: '#18181b',
-                        accent: '#3b82f6', 
-                        secondary: '#a1a1aa'
+                        brand: '#0f172a',
+                        accent: '#2563eb',
+                        surface: 'var(--surface)',
+                        panel: 'var(--panel)',
+                        ink: 'var(--ink)',
+                        muted: 'var(--muted)',
+                        line: 'var(--line)',
                     }
                 }
             }
-        }
+        };
     </script>
     <style>
-        body { background-color: #0f0f11; color: #f4f4f5; }
-        .bento-item {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        :root {
+            color-scheme: light;
+            --surface: #ffffff;
+            --panel: #f8fafc;
+            --ink: #0f172a;
+            --muted: #526176;
+            --line: #e2e8f0;
         }
-        .bento-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.15);
-            border-color: #3b82f6;
+        html.dark {
+            color-scheme: dark;
+            --surface: #0b1120;
+            --panel: #111b2e;
+            --ink: #e5edf8;
+            --muted: #a6b4c9;
+            --line: #26344a;
         }
-        /* Dropdown animation */
-        #lang-menu {
-            transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-            transform-origin: top right;
+        body {
+            background: var(--surface);
+            color: var(--ink);
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
-        #lang-menu.hidden {
+        #progress-bar {
+            position: fixed;
+            inset: 0 auto auto 0;
+            z-index: 100;
+            height: 3px;
+            width: 0;
+            background: #2563eb;
+            transition: width 0.1s ease-out;
+        }
+        .reveal {
             opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
+            transform: translateY(20px);
+            transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        #lang-menu:not(.hidden) {
+        .reveal.active {
             opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .project-card {
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-3px);
+            border-color: #93c5fd;
+            box-shadow: 0 16px 36px -24px rgb(15 23 42 / 0.35);
+        }
+        .dark .project-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 16px 36px -24px rgb(0 0 0 / 0.8);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
         }
     </style>
 </head>
-<body class="antialiased selection:bg-accent selection:text-white" onclick="closeDropdownOnOutsideClick(event)">
+<body class="antialiased selection:bg-accent selection:text-white">
+    <div id="progress-bar" aria-hidden="true"></div>
 
-    <div class="max-w-6xl mx-auto px-6 py-12 md:py-20 relative">
-        
-        <div class="absolute top-6 right-6 md:top-10 md:right-10 z-50">
-            <div class="relative inline-block text-left">
-                <button onclick="toggleDropdown()" id="lang-btn" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-2 rounded-lg text-sm font-mono transition text-white">
-                    <span id="current-lang-label">🇺🇸 EN</span>
-                    <i class="fa-solid fa-chevron-down text-xs text-secondary"></i>
-                </button>
-
-                <div id="lang-menu" class="hidden absolute right-0 mt-2 w-40 rounded-xl shadow-lg bg-[#1c1c1f] ring-1 ring-black ring-opacity-5 focus:outline-none border border-white/10 overflow-hidden">
-                    <div class="py-1">
-                        <a href="#" onclick="setLanguage('en'); return false;" class="block px-4 py-2 text-sm text-secondary hover:bg-white/5 hover:text-white transition">🇺🇸 English</a>
-                        <a href="#" onclick="setLanguage('it'); return false;" class="block px-4 py-2 text-sm text-secondary hover:bg-white/5 hover:text-white transition">🇮🇹 Italiano</a>
-                        <a href="#" onclick="setLanguage('de'); return false;" class="block px-4 py-2 text-sm text-secondary hover:bg-white/5 hover:text-white transition">🇩🇪 Deutsch</a>
-                        <a href="#" onclick="setLanguage('fr'); return false;" class="block px-4 py-2 text-sm text-secondary hover:bg-white/5 hover:text-white transition">🇫🇷 Français</a>
-                        <a href="#" onclick="setLanguage('es'); return false;" class="block px-4 py-2 text-sm text-secondary hover:bg-white/5 hover:text-white transition">🇪🇸 Español</a>
+    <nav class="fixed inset-x-0 top-0 z-50 border-b border-line bg-surface/90 backdrop-blur-md" aria-label="Main navigation">
+        <div class="mx-auto max-w-4xl px-6">
+            <div class="flex h-16 items-center justify-between gap-4">
+                <a href="#home" class="font-bold tracking-tight text-ink">Emanuele Ragusi<span class="text-accent">.</span></a>
+                <div class="flex items-center gap-2">
+                    <div class="relative">
+                        <button id="lang-btn" type="button" aria-expanded="false" aria-controls="lang-menu" class="flex items-center gap-2 rounded-lg border border-line bg-panel px-3 py-2 text-sm font-medium text-ink transition hover:border-accent/40">
+                            <span id="current-lang-label">🇺🇸 EN</span>
+                            <i class="fa-solid fa-chevron-down text-xs text-muted" aria-hidden="true"></i>
+                        </button>
+                        <div id="lang-menu" class="absolute right-0 mt-2 hidden w-36 overflow-hidden rounded-xl border border-line bg-surface p-1 shadow-xl">
+                            <button type="button" data-lang="en" class="block w-full rounded-lg px-3 py-2 text-left text-sm text-muted transition hover:bg-panel hover:text-ink">🇺🇸 English</button>
+                            <button type="button" data-lang="it" class="block w-full rounded-lg px-3 py-2 text-left text-sm text-muted transition hover:bg-panel hover:text-ink">🇮🇹 Italiano</button>
+                            <button type="button" data-lang="de" class="block w-full rounded-lg px-3 py-2 text-left text-sm text-muted transition hover:bg-panel hover:text-ink">🇩🇪 Deutsch</button>
+                            <button type="button" data-lang="fr" class="block w-full rounded-lg px-3 py-2 text-left text-sm text-muted transition hover:bg-panel hover:text-ink">🇫🇷 Français</button>
+                            <button type="button" data-lang="es" class="block w-full rounded-lg px-3 py-2 text-left text-sm text-muted transition hover:bg-panel hover:text-ink">🇪🇸 Español</button>
+                        </div>
                     </div>
+                    <button id="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false" title="Switch to dark mode" class="flex h-10 w-10 items-center justify-center rounded-lg border border-line bg-panel text-ink transition hover:border-accent/40 hover:text-accent">
+                        <i id="theme-icon" class="fa-solid fa-moon" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
+            <div class="flex gap-5 overflow-x-auto pb-3 text-xs font-medium text-muted sm:gap-7 sm:text-sm">
+                <a href="#about" data-i18n="nav_about" class="shrink-0 transition hover:text-accent">About</a>
+                <a href="#projects" data-i18n="nav_projects" class="shrink-0 transition hover:text-accent">Projects</a>
+                <a href="#journey" data-i18n="nav_journey" class="shrink-0 transition hover:text-accent">Education</a>
+                <a href="#skills" data-i18n="nav_skills" class="shrink-0 transition hover:text-accent">Skills</a>
+            </div>
         </div>
+    </nav>
 
-        <header class="mb-16 mt-8">
-            <p class="text-accent font-mono text-sm mb-2 tracking-wider">> HELLO_WORLD</p>
-            <h1 class="text-5xl md:text-7xl font-bold mb-4 tracking-tight">Emanuele Ragusi</h1>
-            <div class="h-8">
-                <span id="typewriter" class="text-xl md:text-2xl text-secondary font-mono"></span>
-                <span class="animate-pulse text-accent">_</span>
+    <main id="home" class="mx-auto max-w-4xl px-6 pb-16 pt-36 sm:pt-40">
+        <header class="reveal pb-16 text-center sm:pb-20">
+            <img src="./photo.jpg" alt="Portrait of Emanuele Ragusi" class="mx-auto mb-6 h-28 w-28 rounded-full border-4 border-panel object-cover shadow-lg sm:h-32 sm:w-32">
+            <p data-i18n="hero_kicker" class="mb-4 font-mono text-xs font-bold uppercase tracking-[0.22em] text-accent sm:text-sm">Management Engineering · Process &amp; AI</p>
+            <h1 class="mb-4 text-4xl font-extrabold leading-tight tracking-tight text-ink sm:text-6xl">Emanuele Ragusi</h1>
+            <p data-i18n="hero_role" class="mb-5 text-lg font-medium text-muted sm:text-xl">M.Sc. Management Engineering @ Politecnico di Torino</p>
+            <p data-i18n="hero_intro" class="mx-auto mb-8 max-w-2xl text-base leading-8 text-muted sm:text-lg">I connect a background in Biomedical Engineering with management, process design and practical automation—turning complex challenges into clear, useful solutions.</p>
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <a href="mailto:emanueleragusi@proton.me" class="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-accent">
+                    <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                    <span data-i18n="contact_btn">Get in touch</span>
+                </a>
+                <a id="cv-email-link" href="mailto:emanueleragusi@proton.me" class="inline-flex items-center gap-2 rounded-full border border-line bg-panel px-5 py-3 text-sm font-semibold text-ink transition hover:border-accent/50 hover:text-accent">
+                    <i class="fa-solid fa-file-arrow-up" aria-hidden="true"></i>
+                    <span data-i18n="cv_btn">Request my CV</span>
+                </a>
+                <a id="cv-whatsapp-link" href="https://wa.me/393317495100" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-[#25d366]/30 bg-[#25d366]/10 px-5 py-3 text-sm font-semibold text-[#128c4a] transition hover:bg-[#25d366]/20">
+                    <i class="fa-brands fa-whatsapp text-base" aria-hidden="true"></i>
+                    <span data-i18n="cv_whatsapp_btn">Request via WhatsApp</span>
+                </a>
+            </div>
+            <p data-i18n="cv_note" class="mt-3 text-xs text-muted">I’ll send the CV personally after your request.</p>
+            <div class="mt-6 flex justify-center gap-5 text-xl text-muted">
+                <a href="https://www.linkedin.com/in/emanuele-ragusi-16303119b/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="transition hover:text-[#0077b5]"><i class="fa-brands fa-linkedin" aria-hidden="true"></i></a>
+                <a href="https://github.com/emanueleragusi" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="transition hover:text-ink"><i class="fa-brands fa-github" aria-hidden="true"></i></a>
             </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <section id="about" class="mb-20 scroll-mt-36 sm:mb-24">
+            <div class="reveal mb-8">
+                <span class="mr-3 font-mono text-lg text-accent">01</span>
+                <h2 data-i18n="about_heading" class="inline text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">A bridge between engineering and management</h2>
+            </div>
+            <div class="reveal rounded-2xl border border-line bg-panel p-6 sm:p-9">
+                <p data-i18n="about_body_1" class="mb-4 text-base leading-8 text-muted sm:text-lg">My path combines Biomedical Engineering with Management Engineering. I enjoy understanding how systems work, finding opportunities to improve them, and bringing people and technology together to make change practical.</p>
+                <p data-i18n="about_body_2" class="text-base leading-8 text-muted sm:text-lg">My current interests include process analysis, workflow automation and responsible, locally run AI tools. International study experiences in Germany have strengthened my adaptability and my confidence working across cultures.</p>
+            </div>
+        </section>
 
-            <div class="bento-item md:col-span-2 bg-card border border-white/5 p-8 rounded-2xl flex flex-col justify-between">
+        <section id="projects" class="mb-20 scroll-mt-36 sm:mb-24">
+            <div class="reveal mb-8">
+                <span class="mr-3 font-mono text-lg text-accent">02</span>
+                <h2 data-i18n="projects_heading" class="inline text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">Selected projects</h2>
+                <p data-i18n="projects_intro" class="mt-3 max-w-2xl leading-7 text-muted">A selection of academic and personal work across process improvement, AI automation, finance and digital projects.</p>
+            </div>
+
+            <div class="grid gap-5">
+                <article class="project-card reveal rounded-2xl border border-line bg-panel p-6 sm:p-8">
+                    <div class="mb-4 flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                            <p data-i18n="ai_label" class="mb-2 font-mono text-xs font-bold uppercase tracking-widest text-accent">AI · Automation · Personal project</p>
+                            <h3 class="text-xl font-bold text-ink sm:text-2xl">
+                                <a href="https://github.com/emanueleragusi/n8n-ai-idea-evaluator" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 hover:text-accent">
+                                    <span data-i18n="ai_title">AI Idea Evaluator — n8n</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-sm opacity-60" aria-hidden="true"></i>
+                                </a>
+                            </h3>
+                        </div>
+                        <span data-i18n="ai_date" class="rounded-full border border-line bg-surface px-3 py-1 font-mono text-xs text-muted">2026</span>
+                    </div>
+                    <p data-i18n="ai_body" class="mb-5 leading-7 text-muted">Designed an n8n workflow to assess business ideas with a locally hosted language model. The project combines Docker-based orchestration, prompt design for structured SWOT analysis and a documented BPMN 2.0 process. Explore the workflow and implementation on GitHub.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-md border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted">n8n</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted">Ollama · Local LLM</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted">Docker</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted">Prompt engineering</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted">BPMN 2.0</span>
+                    </div>
+                </article>
+
+                <article class="project-card reveal rounded-2xl border border-line bg-surface p-6 sm:p-8">
+                    <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+                        <h3 data-i18n="process_title" class="text-xl font-bold text-ink">Municipal process improvement</h3>
+                        <span data-i18n="process_date" class="font-mono text-xs text-muted">Politecnico di Torino · 2025–2026</span>
+                    </div>
+                    <p data-i18n="process_body" class="mb-5 leading-7 text-muted">In a five-person team project, mapped and documented municipal processes using BPMN, UML and SAP Signavio. We identified inefficiencies and cost considerations, then developed concrete improvement proposals and structured documentation.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-md border border-line bg-panel px-3 py-1.5 text-xs font-medium text-muted">SAP Signavio</span>
+                        <span class="rounded-md border border-line bg-panel px-3 py-1.5 text-xs font-medium text-muted">BPMN · UML</span>
+                        <span class="rounded-md border border-line bg-panel px-3 py-1.5 text-xs font-medium text-muted">Process analysis</span>
+                    </div>
+                </article>
+
+                <div class="grid gap-5 md:grid-cols-2">
+                    <article class="project-card reveal rounded-2xl border border-line bg-surface p-6">
+                        <p data-i18n="finance_label" class="mb-2 font-mono text-xs font-bold uppercase tracking-widest text-accent">Financial analysis</p>
+                        <h3 data-i18n="finance_title" class="mb-3 text-lg font-bold text-ink">Pharmaceutical company analysis</h3>
+                        <p data-i18n="finance_body" class="leading-7 text-muted">Analysed the balance sheet and cash flow of a global pharmaceutical company, presenting the findings in a written report with structured analysis and strategic recommendations.</p>
+                    </article>
+                    <article class="project-card reveal rounded-2xl border border-line bg-surface p-6">
+                        <p data-i18n="cfo_label" class="mb-2 font-mono text-xs font-bold uppercase tracking-widest text-accent">Business simulation · CFO</p>
+                        <h3 data-i18n="cfo_title" class="mb-3 text-lg font-bold text-ink">Corporate strategy simulation</h3>
+                        <p data-i18n="cfo_body" class="leading-7 text-muted">As CFO in a simulation with four companies and four product segments, worked on financial planning, investment decisions and cross-functional alignment, using strategic KPIs to evaluate decisions.</p>
+                    </article>
+                </div>
+
+                <article class="project-card reveal rounded-2xl border border-line bg-surface p-6 sm:p-8">
+                    <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+                        <h3 data-i18n="web_title" class="text-xl font-bold text-ink">Multilingual holiday-home website</h3>
+                        <span data-i18n="web_date" class="font-mono text-xs text-muted">Family project · Ongoing</span>
+                    </div>
+                    <p data-i18n="web_body" class="leading-7 text-muted">Developing and maintaining a multilingual website, with a focus on SEO, structured data and clear, useful online information.</p>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <span class="rounded-md border border-line bg-panel px-3 py-1.5 text-xs font-medium text-muted">HTML · CSS</span>
+                        <span class="rounded-md border border-line bg-panel px-3 py-1.5 text-xs font-medium text-muted">SEO</span>
+                        <span class="rounded-md border border-line bg-panel px-3 py-1.5 text-xs font-medium text-muted">Schema.org</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="journey" class="mb-20 scroll-mt-36 sm:mb-24">
+            <div class="reveal mb-8">
+                <span class="mr-3 font-mono text-lg text-accent">03</span>
+                <h2 data-i18n="journey_heading" class="inline text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">Education &amp; international experience</h2>
+            </div>
+            <div class="space-y-4">
+                <article class="reveal grid gap-2 rounded-2xl border border-line bg-panel p-6 sm:grid-cols-[1fr_auto] sm:items-start sm:p-7">
+                    <div>
+                        <h3 data-i18n="msc_title" class="font-bold text-ink">M.Sc. Management Engineering</h3>
+                        <p data-i18n="msc_school" class="mt-1 text-sm text-muted">Politecnico di Torino · Turin, Italy</p>
+                    </div>
+                    <span data-i18n="msc_date" class="font-mono text-xs text-accent">Sep 2025 — Present</span>
+                </article>
+                <article class="reveal grid gap-2 rounded-2xl border border-line bg-panel p-6 sm:grid-cols-[1fr_auto] sm:items-start sm:p-7">
+                    <div>
+                        <h3 data-i18n="reutlingen_title" class="font-bold text-ink">Erasmus+ exchange · Management Engineering</h3>
+                        <p data-i18n="reutlingen_school" class="mt-1 text-sm text-muted">Hochschule Reutlingen · Germany</p>
+                    </div>
+                    <span data-i18n="reutlingen_date" class="font-mono text-xs text-accent">Sep 2026 — Feb 2027</span>
+                </article>
+                <article class="reveal grid gap-2 rounded-2xl border border-line bg-panel p-6 sm:grid-cols-[1fr_auto] sm:items-start sm:p-7">
+                    <div>
+                        <h3 data-i18n="bsc_title" class="font-bold text-ink">B.Sc. Biomedical Engineering</h3>
+                        <p data-i18n="bsc_school" class="mt-1 text-sm text-muted">University of Palermo · Italy</p>
+                    </div>
+                    <span data-i18n="bsc_date" class="font-mono text-xs text-accent">2022 — 2025 · 110/110</span>
+                </article>
+                <article class="reveal grid gap-2 rounded-2xl border border-line bg-panel p-6 sm:grid-cols-[1fr_auto] sm:items-start sm:p-7">
+                    <div>
+                        <h3 data-i18n="jena_title" class="font-bold text-ink">Erasmus+ exchange</h3>
+                        <p data-i18n="jena_school" class="mt-1 text-sm text-muted">Ernst-Abbe-Hochschule Jena · Germany</p>
+                    </div>
+                    <span data-i18n="jena_date" class="font-mono text-xs text-accent">Mar — Aug 2024</span>
+                </article>
+            </div>
+        </section>
+
+        <section id="skills" class="mb-20 scroll-mt-36 sm:mb-24">
+            <div class="reveal mb-8">
+                <span class="mr-3 font-mono text-lg text-accent">04</span>
+                <h2 data-i18n="skills_heading" class="inline text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">Skills &amp; languages</h2>
+            </div>
+            <div class="grid gap-5 md:grid-cols-2">
+                <div class="reveal rounded-2xl border border-line bg-panel p-6 sm:p-7">
+                    <h3 data-i18n="process_skills" class="mb-4 text-xs font-bold uppercase tracking-widest text-muted">Process &amp; analysis</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink">BPMN · UML</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink">SAP Signavio</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink" data-i18n="process_mapping">Process mapping</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink" data-i18n="financial_analysis">Financial analysis</span>
+                    </div>
+                </div>
+                <div class="reveal rounded-2xl border border-line bg-panel p-6 sm:p-7">
+                    <h3 data-i18n="automation_skills" class="mb-4 text-xs font-bold uppercase tracking-widest text-muted">Automation &amp; technology</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink">n8n · Docker · Ollama</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink">Prompt engineering</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink">Python · SQL</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink">HTML · CSS · SEO</span>
+                    </div>
+                </div>
+                <div class="reveal rounded-2xl border border-line bg-panel p-6 sm:p-7">
+                    <h3 data-i18n="data_skills" class="mb-4 text-xs font-bold uppercase tracking-widest text-muted">Data &amp; office</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink">Excel</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink">Word · PowerPoint</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink" data-i18n="technical_writing">Technical writing</span>
+                        <span class="rounded-md border border-line bg-surface px-3 py-2 text-sm text-ink" data-i18n="teamwork">Teamwork</span>
+                    </div>
+                </div>
+                <div class="reveal rounded-2xl border border-line bg-panel p-6 sm:p-7">
+                    <h3 data-i18n="languages_heading" class="mb-4 text-xs font-bold uppercase tracking-widest text-muted">Languages</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex justify-between gap-4"><span class="font-medium text-ink">Italian</span><span data-i18n="italian_level" class="text-muted">Native</span></li>
+                        <li class="flex justify-between gap-4"><span class="font-medium text-ink">English</span><span class="text-muted">C1</span></li>
+                        <li class="flex justify-between gap-4"><span class="font-medium text-ink">German</span><span class="text-muted">B2</span></li>
+                        <li class="flex justify-between gap-4"><span class="font-medium text-ink">Spanish</span><span class="text-muted">B1</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal mb-16 rounded-2xl border border-line bg-panel p-6 sm:p-8">
+            <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 class="text-2xl font-bold mb-4" data-key="about_title">Who am I?</h2>
-                    <p class="text-secondary leading-relaxed mb-4 text-justify" data-key="about_text">
-                        Ciao! I am Emanuele Ragusi and I am a biomedical engineer passionate about creating innovative healthcare solutions that make a real difference in people's lives.
-                    </p>
-                    <h3 class="text-lg font-semibold mb-2 mt-6 text-white" data-key="mission_title">My Mission</h3>
-                    <p class="text-secondary leading-relaxed text-justify" data-key="mission_text">
-                        I believe true progress is achieved when advanced technologies improve lives and become accessible to everyone. My mission is to design and develop innovative and sustainable biomedical solutions that not only push the boundaries of healthcare but also reach those who might never have imagined benefiting from them.
-                    </p>
-                    <p class="text-secondary leading-relaxed mt-4 text-justify" data-key="background_text">
-                        I am highly motivated with a strong academic background and international experience gained through an Erasmus exchange in Germany. Possessing diverse skillset with technical expertise, language proficiency, and key competencies essential for success in research, teamwork, and problem-solving.
-                    </p>
+                    <p data-i18n="community_label" class="mb-2 font-mono text-xs font-bold uppercase tracking-widest text-accent">Beyond the classroom</p>
+                    <h2 data-i18n="community_heading" class="text-xl font-bold text-ink">Community &amp; volunteering</h2>
+                    <p data-i18n="community_body" class="mt-2 max-w-2xl leading-7 text-muted">Volunteer with Plastic Free Onlus since 2023, helping organise and run more than ten clean-up events. Also volunteered as a multilingual museum guide at Museo Sant’Elia in Palermo in 2021.</p>
                 </div>
-                
-                <div class="mt-8 flex gap-3">
-                    <a href="https://www.linkedin.com/in/emanuele-ragusi-16303119b/" target="_blank" class="bg-[#0077b5]/10 text-[#0077b5] hover:bg-[#0077b5]/20 px-4 py-2 rounded-lg text-sm transition font-medium flex items-center gap-2">
-                        <i class="fab fa-linkedin"></i> LinkedIn
-                    </a>
-                    <a href="mailto:emanueleragusi@proton.me" class="bg-accent/10 text-accent hover:bg-accent/20 px-4 py-2 rounded-lg text-sm transition font-medium flex items-center gap-2">
-                        <i class="fa-solid fa-envelope"></i> Email
-                    </a>
-                </div>
+                <i class="fa-solid fa-hands-helping text-3xl text-accent/70" aria-hidden="true"></i>
             </div>
+        </section>
 
-            <div class="flex flex-col gap-6">
-                <div class="bento-item bg-card border border-white/5 p-8 rounded-2xl relative overflow-hidden group flex-1">
-                    <div class="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-accent/10 rounded-full blur-3xl group-hover:bg-accent/20 transition"></div>
-                    <h3 class="text-accent font-mono text-xs mb-2 uppercase tracking-widest" data-key="status_label">Current Status</h3>
-                    <h2 class="text-xl font-bold mb-2" data-key="status_title">M.Sc. student</h2>
-                    <p class="text-sm text-secondary mb-4"> I am pursuing a master's degree in management engineering at the Polytechnic University of Turin.</p>
-                </div>
-
-                <div class="bento-item bg-card border border-white/5 p-8 rounded-2xl flex-1 flex flex-col justify-center">
-                    <h2 class="text-xl font-bold mb-2" data-key="cv_title">Curriculum Vitae</h2>
-                    <p class="text-xs text-secondary mb-4" data-key="cv_desc">Download my CV!</p>
-                    <div class="flex flex-col gap-2">
-                        <a href="./cv.pdf" target="_blank" class="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-center py-2 rounded-lg text-sm transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-download"></i> CV
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bento-item md:col-span-1 bg-card border border-white/5 p-8 rounded-2xl">
-                <h2 class="text-xl font-bold mb-6" data-key="competencies_title">Core Competencies</h2>
-                <ul class="space-y-3 text-sm text-secondary">
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-microscope text-accent mt-1"></i>
-                        <span data-key="comp_1">Scientific Research & Analysis</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-flask text-accent mt-1"></i>
-                        <span data-key="comp_2">Research Methodologies</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-users text-accent mt-1"></i>
-                        <span data-key="comp_3">Teamwork & Coordination</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-file-pen text-accent mt-1"></i>
-                        <span data-key="comp_4">Technical Writing & Reports</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-brain text-accent mt-1"></i>
-                        <span data-key="comp_5">Problem-Solving</span>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <i class="fa-solid fa-shuffle text-accent mt-1"></i>
-                        <span data-key="comp_6">Adaptability & Flexibility</span>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bento-item bg-card border border-white/5 p-8 rounded-2xl">
-                <h2 class="text-xl font-bold mb-6" data-key="skills_title">Technical Skills</h2>
-                <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 bg-white/5 rounded-md text-sm border border-white/10 text-secondary cursor-default hover:text-white hover:border-accent transition">AI Agents & Automation (n8n)</span>
-                    
-                    <a href="https://github.com/emanueleragusi/Iris-classification/blob/main/main.py" target="_blank" class="px-3 py-1 bg-white/5 rounded-md text-sm border border-white/10 text-secondary cursor-pointer hover:text-white hover:border-accent transition">Python</a>
-                    
-                    <span class="px-3 py-1 bg-white/5 rounded-md text-sm border border-white/10 text-secondary cursor-default hover:text-white hover:border-accent transition">SAP Signavio (BPMN and UML)</span>
-                    <span class="px-3 py-1 bg-white/5 rounded-md text-sm border border-white/10 text-secondary cursor-default hover:text-white hover:border-accent transition">Microsoft Office</span>
-                    <span class="px-3 py-1 bg-white/5 rounded-md text-sm border border-white/10 text-secondary cursor-default hover:text-white hover:border-accent transition">SQL</span>
-                    <span class="px-3 py-1 bg-white/5 rounded-md text-sm border border-white/10 text-secondary cursor-default hover:text-white hover:border-accent transition">Git & GitHub</span>
-                    <span class="px-3 py-1 bg-white/5 rounded-md text-sm border border-white/10 text-secondary cursor-default hover:text-white hover:border-accent transition">HTML/CSS</span>
-                </div>
-            </div>
-
-            <div class="bento-item bg-card border border-white/5 p-8 rounded-2xl">
-                <h2 class="text-xl font-bold mb-4" data-key="languages_title">Languages</h2>
-                <div class="space-y-4">
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Italian</span>
-                            <span class="text-secondary" data-key="lang_native">Native</span>
-                        </div>
-                        <div class="w-full bg-white/10 h-1 rounded-full"><div class="bg-blue-500 h-1 rounded-full w-full"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>English</span>
-                            <span class="text-secondary">Fluent</span>
-                        </div>
-                        <div class="w-full bg-white/10 h-1 rounded-full"><div class="bg-blue-500 h-1 rounded-full w-full"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>German</span>
-                            <span class="text-secondary">Advanced</span>
-                        </div>
-                        <div class="w-full bg-white/10 h-1 rounded-full"><div class="bg-blue-500 h-1 rounded-full w-[70%]"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-sm mb-1">
-                            <span>Spanish</span>
-                            <span class="text-secondary">Elementary</span>
-                        </div>
-                        <div class="w-full bg-white/10 h-1 rounded-full"><div class="bg-blue-500 h-1 rounded-full w-[50%]"></div></div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <footer class="mt-20 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-secondary text-sm">
-            <p>&copy; 2026 Emanuele Ragusi. All rights reserved.</p>
-            <div class="flex gap-4 mt-4 md:mt-0">
-                <a href="https://www.linkedin.com/in/emanuele-ragusi-16303119b/" class="hover:text-white transition">LinkedIn</a>
-                <a href="https://github.com/emanueleragusi" class="hover:text-white transition">GitHub</a>
-                <a href="https://www.instagram.com/emanueleragusi_/" class="hover:text-white transition">Instagram</a>
-                <a href="mailto:emanueleragusi@proton.me" class="hover:text-white transition">Email</a>
+        <footer class="flex flex-col items-center justify-between gap-4 border-t border-line py-8 text-sm text-muted sm:flex-row">
+            <p data-i18n="footer_text">&copy; 2026 Emanuele Ragusi</p>
+            <div class="flex gap-5 font-medium">
+                <a href="https://www.linkedin.com/in/emanuele-ragusi-16303119b/" target="_blank" rel="noopener noreferrer" class="transition hover:text-accent">LinkedIn</a>
+                <a href="https://github.com/emanueleragusi" target="_blank" rel="noopener noreferrer" class="transition hover:text-accent">GitHub</a>
+                <a href="mailto:emanueleragusi@proton.me" class="transition hover:text-accent">Email</a>
             </div>
         </footer>
-
-    </div>
+    </main>
 
     <script>
-        // --- TRANSLATIONS DICTIONARY ---
         const translations = {
             en: {
-                flag: "🇺🇸 EN",
-                about_title: "Who am I?",
-                about_text: "Ciao! I am Emanuele Ragusi and I am a biomedical engineer passionate about creating innovative healthcare solutions that make a real difference in people's lives.",
-                mission_title: "My Mission",
-                mission_text: "I believe true progress is achieved when advanced technologies improve lives and become accessible to everyone. My mission is to design and develop innovative and sustainable biomedical solutions that not only push the boundaries of healthcare but also reach those who might never have imagined benefiting from them.",
-                background_text: "I am highly motivated with a strong academic background and international experience gained through an Erasmus exchange in Germany. Possessing diverse skillset with technical expertise, language proficiency, and key competencies essential for success in research, teamwork, and problem-solving.",
-                status_label: "CURRENT STATUS",
-                status_title: "MSc Student",
-                cv_title: "Curriculum Vitae",
-                cv_desc: "Download my CV in your preferred language!",
-                competencies_title: "Core Competencies",
-                comp_1: "Scientific Research & Analysis",
-                comp_2: "Research Methodologies",
-                comp_3: "Teamwork & Coordination",
-                comp_4: "Technical Writing & Reports",
-                comp_5: "Problem-Solving",
-                comp_6: "Adaptability & Flexibility",
-                skills_title: "Technical Skills",
-                languages_title: "Languages",
-                lang_native: "Native"
+                flag: '🇺🇸 EN',
+                nav_about: 'About', nav_projects: 'Projects', nav_journey: 'Education', nav_skills: 'Skills',
+                hero_kicker: 'Management Engineering · Process & AI',
+                hero_role: 'M.Sc. Management Engineering @ Politecnico di Torino',
+                hero_intro: 'I connect a background in Biomedical Engineering with management, process design and practical automation—turning complex challenges into clear, useful solutions.',
+                contact_btn: 'Get in touch', cv_btn: 'Request my CV', cv_whatsapp_btn: 'Request via WhatsApp',
+                cv_note: 'I’ll send the CV personally after your request.',
+                cv_email_subject: 'CV request', cv_email_body: 'Hello Emanuele,\n\nI would like to request your CV.\n\nMy name is: ',
+                cv_whatsapp_message: 'Hello Emanuele, I would like to request your CV. My name is: ',
+                about_heading: 'A bridge between engineering and management',
+                about_body_1: 'My path combines Biomedical Engineering with Management Engineering. I enjoy understanding how systems work, finding opportunities to improve them, and bringing people and technology together to make change practical.',
+                about_body_2: 'My current interests include process analysis, workflow automation and responsible, locally run AI tools. International study experiences in Germany have strengthened my adaptability and my confidence working across cultures.',
+                projects_heading: 'Selected projects',
+                projects_intro: 'A selection of academic and personal work across process improvement, AI automation, finance and digital projects.',
+                ai_label: 'AI · Automation · Personal project', ai_title: 'AI Idea Evaluator — n8n', ai_date: '2026',
+                ai_body: 'Designed an n8n workflow to assess business ideas with a locally hosted language model. The project combines Docker-based orchestration, prompt design for structured SWOT analysis and a documented BPMN 2.0 process. Explore the workflow and implementation on GitHub.',
+                process_title: 'Municipal process improvement', process_date: 'Politecnico di Torino · 2025–2026',
+                process_body: 'In a five-person team project, mapped and documented municipal processes using BPMN, UML and SAP Signavio. We identified inefficiencies and cost considerations, then developed concrete improvement proposals and structured documentation.',
+                finance_label: 'Financial analysis', finance_title: 'Pharmaceutical company analysis',
+                finance_body: 'Analysed the balance sheet and cash flow of a global pharmaceutical company, presenting the findings in a written report with structured analysis and strategic recommendations.',
+                cfo_label: 'Business simulation · CFO', cfo_title: 'Corporate strategy simulation',
+                cfo_body: 'As CFO in a simulation with four companies and four product segments, worked on financial planning, investment decisions and cross-functional alignment, using strategic KPIs to evaluate decisions.',
+                web_title: 'Multilingual holiday-home website', web_date: 'Family project · Ongoing',
+                web_body: 'Developing and maintaining a multilingual website, with a focus on SEO, structured data and clear, useful online information.',
+                journey_heading: 'Education & international experience',
+                msc_title: 'M.Sc. Management Engineering', msc_school: 'Politecnico di Torino · Turin, Italy', msc_date: 'Sep 2025 — Present',
+                reutlingen_title: 'Erasmus+ exchange · Management Engineering', reutlingen_school: 'Hochschule Reutlingen · Germany', reutlingen_date: 'Sep 2026 — Feb 2027',
+                bsc_title: 'B.Sc. Biomedical Engineering', bsc_school: 'University of Palermo · Italy', bsc_date: '2022 — 2025 · 110/110',
+                jena_title: 'Erasmus+ exchange', jena_school: 'Ernst-Abbe-Hochschule Jena · Germany', jena_date: 'Mar — Aug 2024',
+                skills_heading: 'Skills & languages', process_skills: 'Process & analysis', process_mapping: 'Process mapping',
+                financial_analysis: 'Financial analysis', automation_skills: 'Automation & technology', data_skills: 'Data & office',
+                technical_writing: 'Technical writing', teamwork: 'Teamwork', languages_heading: 'Languages', italian_level: 'Native',
+                community_label: 'Beyond the classroom', community_heading: 'Community & volunteering',
+                community_body: 'Volunteer with Plastic Free Onlus since 2023, helping organise and run more than ten clean-up events. Also volunteered as a multilingual museum guide at Museo Sant’Elia in Palermo in 2021.',
+                footer_text: '© 2026 Emanuele Ragusi',
             },
             it: {
-                flag: "🇮🇹 IT",
-                about_title: "Chi sono?",
-                about_text: "Ciao! Sono Emanuele Ragusi, ingegnere biomedico con la passione per la creazione di soluzioni sanitarie innovative che facciano una vera differenza nella vita delle persone.",
-                mission_title: "La mia Missione",
-                mission_text: "Credo che il vero progresso si ottenga quando le tecnologie avanzate migliorano la vita e diventano accessibili a tutti. La mia missione è progettare e sviluppare soluzioni biomediche innovative e sostenibili.",
-                background_text: "Sono altamente motivato, con un solido background accademico e un'esperienza internazionale maturata durante l'Erasmus in Germania. Possiedo competenze trasversali con esperienza tecnica, padronanza delle lingue e abilità chiave essenziali per il successo nella ricerca.",
-                status_label: "STATO ATTUALE",
-                status_title: "Studente Magistrale",
-                cv_title: "Curriculum Vitae",
-                cv_desc: "Scarica il mio CV nella lingua che preferisci!",
-                competencies_title: "Competenze Chiave",
-                comp_1: "Ricerca Scientifica e Analisi",
-                comp_2: "Metodologie di Ricerca",
-                comp_3: "Lavoro di squadra",
-                comp_4: "Scrittura Tecnica e Report",
-                comp_5: "Problem Solving",
-                comp_6: "Adattabilità e Flessibilità",
-                skills_title: "Competenze Tecniche",
-                languages_title: "Lingue",
-                lang_native: "Madrelingua"
+                flag: '🇮🇹 IT',
+                nav_about: 'Profilo', nav_projects: 'Progetti', nav_journey: 'Formazione', nav_skills: 'Competenze',
+                hero_kicker: 'Ingegneria Gestionale · Processi e AI',
+                hero_role: 'Laurea magistrale in Ingegneria Gestionale @ Politecnico di Torino',
+                hero_intro: 'Unisco la formazione in Ingegneria Biomedica al management, alla progettazione dei processi e all’automazione, trasformando problemi complessi in soluzioni chiare e concrete.',
+                contact_btn: 'Contattami', cv_btn: 'Richiedi il CV', cv_whatsapp_btn: 'Richiedilo su WhatsApp',
+                cv_note: 'Ti invierò personalmente il CV dopo la richiesta.',
+                cv_email_subject: 'Richiesta del CV', cv_email_body: 'Ciao Emanuele,\n\nvorrei richiedere il tuo CV.\n\nMi chiamo: ',
+                cv_whatsapp_message: 'Ciao Emanuele, vorrei richiedere il tuo CV. Mi chiamo: ',
+                about_heading: 'Un ponte tra ingegneria e management',
+                about_body_1: 'Il mio percorso unisce Ingegneria Biomedica e Ingegneria Gestionale. Mi piace capire come funzionano i sistemi, individuare opportunità di miglioramento e integrare persone e tecnologia per rendere il cambiamento concreto.',
+                about_body_2: 'I miei interessi attuali includono analisi dei processi, automazione dei flussi di lavoro e strumenti di intelligenza artificiale eseguibili in locale. Le esperienze di studio in Germania hanno rafforzato la mia capacità di adattamento e collaborazione interculturale.',
+                projects_heading: 'Progetti selezionati',
+                projects_intro: 'Una selezione di progetti accademici e personali tra miglioramento dei processi, automazione AI, finanza e digitale.',
+                ai_label: 'AI · Automazione · Progetto personale', ai_title: 'AI Idea Evaluator — n8n', ai_date: '2026',
+                ai_body: 'Ho progettato un workflow n8n per valutare idee imprenditoriali con un modello linguistico eseguito in locale. Il progetto combina orchestrazione con Docker, prompt per un’analisi SWOT strutturata e documentazione del processo BPMN 2.0. Workflow e implementazione sono disponibili su GitHub.',
+                process_title: 'Miglioramento dei processi comunali', process_date: 'Politecnico di Torino · 2025–2026',
+                process_body: 'In un progetto di gruppo di cinque persone, abbiamo mappato e documentato processi comunali con BPMN, UML e SAP Signavio. Abbiamo individuato inefficienze e costi, elaborando proposte di miglioramento concrete e documentazione strutturata.',
+                finance_label: 'Analisi finanziaria', finance_title: 'Analisi di un’azienda farmaceutica',
+                finance_body: 'Ho analizzato bilancio e flussi di cassa di un gruppo farmaceutico internazionale, presentando i risultati in un report con analisi strutturata e raccomandazioni strategiche.',
+                cfo_label: 'Simulazione aziendale · CFO', cfo_title: 'Simulazione di strategia aziendale',
+                cfo_body: 'Nel ruolo di CFO, in una simulazione con quattro aziende e quattro segmenti di prodotto, mi sono occupato di pianificazione finanziaria, decisioni d’investimento e coordinamento tra funzioni, valutando le scelte tramite KPI strategici.',
+                web_title: 'Sito multilingue per casa vacanze', web_date: 'Progetto familiare · In corso',
+                web_body: 'Sviluppo e manutenzione di un sito web multilingue, con attenzione a SEO, dati strutturati e contenuti online chiari e utili.',
+                journey_heading: 'Formazione ed esperienza internazionale',
+                msc_title: 'Laurea magistrale in Ingegneria Gestionale', msc_school: 'Politecnico di Torino · Torino, Italia', msc_date: 'Set 2025 — In corso',
+                reutlingen_title: 'Scambio Erasmus+ · Ingegneria Gestionale', reutlingen_school: 'Hochschule Reutlingen · Germania', reutlingen_date: 'Set 2026 — Feb 2027',
+                bsc_title: 'Laurea in Ingegneria Biomedica', bsc_school: 'Università degli Studi di Palermo · Italia', bsc_date: '2022 — 2025 · 110/110',
+                jena_title: 'Scambio Erasmus+', jena_school: 'Ernst-Abbe-Hochschule Jena · Germania', jena_date: 'Mar — Ago 2024',
+                skills_heading: 'Competenze e lingue', process_skills: 'Processi e analisi', process_mapping: 'Mappatura dei processi',
+                financial_analysis: 'Analisi finanziaria', automation_skills: 'Automazione e tecnologia', data_skills: 'Dati e strumenti office',
+                technical_writing: 'Scrittura tecnica', teamwork: 'Lavoro di squadra', languages_heading: 'Lingue', italian_level: 'Madrelingua',
+                community_label: 'Oltre l’università', community_heading: 'Volontariato e comunità',
+                community_body: 'Volontario di Plastic Free Onlus dal 2023, contribuisco all’organizzazione e allo svolgimento di oltre dieci iniziative di pulizia. Nel 2021 ho inoltre fatto da guida museale in più lingue al Museo Sant’Elia di Palermo.',
+                footer_text: '© 2026 Emanuele Ragusi',
             },
             de: {
-                flag: "🇩🇪 DE",
-                about_title: "Wer bin ich?",
-                about_text: "Hallo! Ich bin Emanuele Ragusi, ein biomedizinischer Ingenieur mit einer Leidenschaft für innovative Gesundheitslösungen, die das Leben der Menschen wirklich verbessern.",
-                mission_title: "Meine Mission",
-                mission_text: "Ich glaube, dass wahrer Fortschritt entsteht, wenn fortschrittliche Technologien das Leben verbessern und für alle zugänglich werden. Meine Mission ist es, nachhaltige biomedizinische Lösungen zu entwickeln.",
-                background_text: "Ich bin hoch motiviert, habe einen starken akademischen Hintergrund und internationale Erfahrung durch mein Erasmus in Deutschland gesammelt. Ich verfüge über vielfältige technische Fähigkeiten und Sprachkenntnisse.",
-                status_label: "AKTUELLER STATUS",
-                status_title: "Masterstudent",
-                cv_title: "Lebenslauf",
-                cv_desc: "Laden Sie meinen Lebenslauf herunter!",
-                competencies_title: "Kernkompetenzen",
-                comp_1: "Wissenschaftliche Forschung",
-                comp_2: "Forschungsmethoden",
-                comp_3: "Teamarbeit & Koordination",
-                comp_4: "Technisches Schreiben",
-                comp_5: "Problemlösung",
-                comp_6: "Anpassungsfähigkeit",
-                skills_title: "Technische Skills",
-                languages_title: "Sprachen",
-                lang_native: "Muttersprache"
+                flag: '🇩🇪 DE',
+                nav_about: 'Profil', nav_projects: 'Projekte', nav_journey: 'Ausbildung', nav_skills: 'Kompetenzen',
+                hero_kicker: 'Wirtschaftsingenieurwesen · Prozesse & KI',
+                hero_role: 'M.Sc. Wirtschaftsingenieurwesen @ Politecnico di Torino',
+                hero_intro: 'Ich verbinde meinen Hintergrund in Biomedizintechnik mit Management, Prozessgestaltung und Automatisierung, um komplexe Herausforderungen in klare, praktische Lösungen zu verwandeln.',
+                contact_btn: 'Kontakt', cv_btn: 'Lebenslauf anfragen', cv_whatsapp_btn: 'Per WhatsApp anfragen',
+                cv_note: 'Ich sende den Lebenslauf nach der Anfrage persönlich zu.',
+                cv_email_subject: 'Anfrage für den Lebenslauf', cv_email_body: 'Hallo Emanuele,\n\nich möchte gerne deinen Lebenslauf anfragen.\n\nMein Name ist: ',
+                cv_whatsapp_message: 'Hallo Emanuele, ich möchte gerne deinen Lebenslauf anfragen. Mein Name ist: ',
+                about_heading: 'Eine Brücke zwischen Technik und Management',
+                about_body_1: 'Mein Weg verbindet Biomedizintechnik und Wirtschaftsingenieurwesen. Ich analysiere gerne Systeme, erkenne Verbesserungspotenziale und verbinde Menschen und Technologie, um Veränderungen praktisch umzusetzen.',
+                about_body_2: 'Meine aktuellen Interessen umfassen Prozessanalyse, Workflow-Automatisierung und lokal betriebene KI-Werkzeuge. Internationale Studienerfahrungen in Deutschland haben meine Anpassungsfähigkeit und interkulturelle Zusammenarbeit gestärkt.',
+                projects_heading: 'Ausgewählte Projekte',
+                projects_intro: 'Eine Auswahl akademischer und persönlicher Projekte zu Prozessverbesserung, KI-Automatisierung, Finanzen und digitalen Lösungen.',
+                ai_label: 'KI · Automatisierung · Persönliches Projekt', ai_title: 'AI Idea Evaluator — n8n', ai_date: '2026',
+                ai_body: 'Entwicklung eines n8n-Workflows zur Bewertung von Geschäftsideen mit einem lokal betriebenen Sprachmodell. Das Projekt verbindet Docker-Orchestrierung, Prompt-Design für eine strukturierte SWOT-Analyse und einen dokumentierten BPMN-2.0-Prozess. Workflow und Implementierung sind auf GitHub verfügbar.',
+                process_title: 'Verbesserung kommunaler Prozesse', process_date: 'Politecnico di Torino · 2025–2026',
+                process_body: 'In einem fünfköpfigen Teamprojekt wurden kommunale Prozesse mit BPMN, UML und SAP Signavio modelliert und dokumentiert. Wir identifizierten Ineffizienzen und Kostenaspekte und entwickelten konkrete Verbesserungsvorschläge sowie strukturierte Dokumentation.',
+                finance_label: 'Finanzanalyse', finance_title: 'Analyse eines Pharmaunternehmens',
+                finance_body: 'Analyse von Bilanz und Cashflow eines globalen Pharmaunternehmens. Die Ergebnisse wurden in einem schriftlichen Bericht mit strukturierter Auswertung und strategischen Empfehlungen zusammengefasst.',
+                cfo_label: 'Unternehmenssimulation · CFO', cfo_title: 'Simulation der Unternehmensstrategie',
+                cfo_body: 'Als CFO in einer Simulation mit vier Unternehmen und vier Produktsegmenten arbeitete ich an Finanzplanung, Investitionsentscheidungen und bereichsübergreifender Abstimmung. Strategische Kennzahlen dienten zur Bewertung der Entscheidungen.',
+                web_title: 'Mehrsprachige Ferienhaus-Website', web_date: 'Familienprojekt · Laufend',
+                web_body: 'Entwicklung und Pflege einer mehrsprachigen Website mit Fokus auf SEO, strukturierte Daten und klare, hilfreiche Online-Informationen.',
+                journey_heading: 'Ausbildung & internationale Erfahrung',
+                msc_title: 'M.Sc. Wirtschaftsingenieurwesen', msc_school: 'Politecnico di Torino · Turin, Italien', msc_date: 'Sep. 2025 — Heute',
+                reutlingen_title: 'Erasmus+ Austausch · Wirtschaftsingenieurwesen', reutlingen_school: 'Hochschule Reutlingen · Deutschland', reutlingen_date: 'Sep. 2026 — Feb. 2027',
+                bsc_title: 'B.Sc. Biomedizintechnik', bsc_school: 'Universität Palermo · Italien', bsc_date: '2022 — 2025 · 110/110',
+                jena_title: 'Erasmus+ Austausch', jena_school: 'Ernst-Abbe-Hochschule Jena · Deutschland', jena_date: 'März — Aug. 2024',
+                skills_heading: 'Kompetenzen & Sprachen', process_skills: 'Prozesse & Analyse', process_mapping: 'Prozessmodellierung',
+                financial_analysis: 'Finanzanalyse', automation_skills: 'Automatisierung & Technologie', data_skills: 'Daten & Office',
+                technical_writing: 'Technisches Schreiben', teamwork: 'Teamarbeit', languages_heading: 'Sprachen', italian_level: 'Muttersprache',
+                community_label: 'Außerhalb der Universität', community_heading: 'Ehrenamt & Gemeinschaft',
+                community_body: 'Seit 2023 ehrenamtlich bei Plastic Free Onlus; Mitarbeit an der Organisation und Durchführung von über zehn Aufräumaktionen. 2021 war ich außerdem mehrsprachiger Museumsführer im Museo Sant’Elia in Palermo.',
+                footer_text: '© 2026 Emanuele Ragusi',
             },
             fr: {
-                flag: "🇫🇷 FR",
-                about_title: "Qui suis-je ?",
-                about_text: "Bonjour ! Je suis Emanuele Ragusi, ingénieur biomédical passionné par la création de solutions de santé innovantes qui font une réelle différence dans la vie des gens.",
-                mission_title: "Ma Mission",
-                mission_text: "Je crois que le vrai progrès est atteint lorsque les technologies avancées améliorent les vies et deviennent accessibles à tous. Ma mission est de concevoir des solutions biomédicales durables.",
-                background_text: "Très motivé, avec un solide bagage académique et une expérience internationale acquise lors d'un Erasmus en Allemagne. Je possède des compétences techniques et linguistiques variées.",
-                status_label: "STATUT ACTUEL",
-                status_title: "Étudiant en Master",
-                cv_title: "Curriculum Vitae",
-                cv_desc: "Téléchargez mon CV !",
-                competencies_title: "Compétences Clés",
-                comp_1: "Recherche Scientifique",
-                comp_2: "Méthodologies de Recherche",
-                comp_3: "Travail d'équipe",
-                comp_4: "Rédaction Technique",
-                comp_5: "Résolution de problèmes",
-                comp_6: "Adaptabilité",
-                skills_title: "Compétences Techniques",
-                languages_title: "Langues",
-                lang_native: "Langue maternelle"
+                flag: '🇫🇷 FR',
+                nav_about: 'Profil', nav_projects: 'Projets', nav_journey: 'Formation', nav_skills: 'Compétences',
+                hero_kicker: 'Génie de gestion · Processus & IA',
+                hero_role: 'Master en génie de gestion @ Politecnico di Torino',
+                hero_intro: 'Je relie ma formation en génie biomédical au management, à la conception de processus et à l’automatisation pour transformer des défis complexes en solutions concrètes.',
+                contact_btn: 'Me contacter', cv_btn: 'Demander mon CV', cv_whatsapp_btn: 'Demander sur WhatsApp',
+                cv_note: 'Je vous enverrai personnellement mon CV après votre demande.',
+                cv_email_subject: 'Demande de CV', cv_email_body: 'Bonjour Emanuele,\n\nje souhaiterais demander votre CV.\n\nJe m’appelle : ',
+                cv_whatsapp_message: 'Bonjour Emanuele, je souhaiterais demander votre CV. Je m’appelle : ',
+                about_heading: 'Un lien entre ingénierie et management',
+                about_body_1: 'Mon parcours associe le génie biomédical et le génie de gestion. J’aime comprendre le fonctionnement des systèmes, repérer les possibilités d’amélioration et réunir personnes et technologies pour concrétiser le changement.',
+                about_body_2: 'Mes intérêts actuels comprennent l’analyse des processus, l’automatisation des flux de travail et les outils d’IA exécutés localement. Mes expériences d’études en Allemagne ont renforcé mon adaptabilité et ma collaboration interculturelle.',
+                projects_heading: 'Projets sélectionnés',
+                projects_intro: 'Une sélection de projets universitaires et personnels autour de l’amélioration des processus, de l’automatisation par l’IA, de la finance et du numérique.',
+                ai_label: 'IA · Automatisation · Projet personnel', ai_title: 'AI Idea Evaluator — n8n', ai_date: '2026',
+                ai_body: 'Conception d’un workflow n8n pour évaluer des idées commerciales avec un modèle de langage hébergé localement. Le projet associe orchestration avec Docker, prompts pour une analyse SWOT structurée et documentation du processus BPMN 2.0. Le workflow et son implémentation sont disponibles sur GitHub.',
+                process_title: 'Amélioration des processus municipaux', process_date: 'Politecnico di Torino · 2025–2026',
+                process_body: 'Dans un projet d’équipe de cinq personnes, cartographie et documentation de processus municipaux avec BPMN, UML et SAP Signavio. Nous avons identifié des inefficacités et des coûts, puis élaboré des propositions d’amélioration concrètes et une documentation structurée.',
+                finance_label: 'Analyse financière', finance_title: 'Analyse d’une entreprise pharmaceutique',
+                finance_body: 'Analyse du bilan et des flux de trésorerie d’un groupe pharmaceutique international, présentée dans un rapport écrit comprenant une analyse structurée et des recommandations stratégiques.',
+                cfo_label: 'Simulation d’entreprise · CFO', cfo_title: 'Simulation de stratégie d’entreprise',
+                cfo_body: 'En tant que CFO d’une simulation réunissant quatre entreprises et quatre segments de produits, participation à la planification financière, aux décisions d’investissement et à la coordination transversale, avec évaluation par des indicateurs stratégiques.',
+                web_title: 'Site multilingue de maison de vacances', web_date: 'Projet familial · En cours',
+                web_body: 'Développement et maintenance d’un site multilingue axé sur le référencement, les données structurées et des informations en ligne claires et utiles.',
+                journey_heading: 'Formation & expérience internationale',
+                msc_title: 'Master en génie de gestion', msc_school: 'Politecnico di Torino · Turin, Italie', msc_date: 'Sept. 2025 — Aujourd’hui',
+                reutlingen_title: 'Échange Erasmus+ · Génie de gestion', reutlingen_school: 'Hochschule Reutlingen · Allemagne', reutlingen_date: 'Sept. 2026 — Févr. 2027',
+                bsc_title: 'Licence en génie biomédical', bsc_school: 'Université de Palerme · Italie', bsc_date: '2022 — 2025 · 110/110',
+                jena_title: 'Échange Erasmus+', jena_school: 'Ernst-Abbe-Hochschule Jena · Allemagne', jena_date: 'Mars — Août 2024',
+                skills_heading: 'Compétences & langues', process_skills: 'Processus & analyse', process_mapping: 'Cartographie des processus',
+                financial_analysis: 'Analyse financière', automation_skills: 'Automatisation & technologie', data_skills: 'Données & bureautique',
+                technical_writing: 'Rédaction technique', teamwork: 'Travail d’équipe', languages_heading: 'Langues', italian_level: 'Langue maternelle',
+                community_label: 'En dehors des études', community_heading: 'Engagement associatif',
+                community_body: 'Bénévole chez Plastic Free Onlus depuis 2023, participation à l’organisation et à la réalisation de plus de dix opérations de nettoyage. En 2021, j’ai également été guide multilingue au musée Sant’Elia de Palerme.',
+                footer_text: '© 2026 Emanuele Ragusi',
             },
             es: {
-                flag: "🇪🇸 ES",
-                about_title: "¿Quién soy?",
-                about_text: "¡Hola! Soy Emanuele Ragusi, un ingeniero biomédical apasionado por crear soluciones sanitarias innovadoras que marquen una diferencia real en la vida de las personas.",
-                mission_title: "Mi Misión",
-                mission_text: "Creo que el verdadero progreso se logra cuando las tecnologías avanzadas mejoran las vidas y son accesibles para todos. Mi misión es diseñar soluciones biomédicas sostenibles.",
-                background_text: "Estoy muy motivado, con una sólida formación académica y experiencia internacional obtenida a través de un Erasmus en Alemania. Poseo diversas habilidades técnicas y lingüísticas.",
-                status_label: "ESTADO ACTUAL",
-                status_title: "Estudiante de Máster",
-                cv_title: "Curriculum Vitae",
-                cv_desc: "¡Descarga mi CV!",
-                competencies_title: "Competencias Clave",
-                comp_1: "Investigación Científica",
-                comp_2: "Metodologías de Investigación",
-                comp_3: "Trabajo en equipo",
-                comp_4: "Redacción Técnica",
-                comp_5: "Resolución de problemas",
-                comp_6: "Adaptabilidad",
-                skills_title: "Habilidades Técnicas",
-                languages_title: "Idiomas",
-                lang_native: "Nativo"
+                flag: '🇪🇸 ES',
+                nav_about: 'Perfil', nav_projects: 'Proyectos', nav_journey: 'Formación', nav_skills: 'Habilidades',
+                hero_kicker: 'Ingeniería de Gestión · Procesos e IA',
+                hero_role: 'Máster en Ingeniería de Gestión @ Politecnico di Torino',
+                hero_intro: 'Combino mi formación en Ingeniería Biomédica con gestión, diseño de procesos y automatización para convertir desafíos complejos en soluciones claras y prácticas.',
+                contact_btn: 'Contactar', cv_btn: 'Solicitar mi CV', cv_whatsapp_btn: 'Solicitar por WhatsApp',
+                cv_note: 'Te enviaré personalmente mi CV después de tu solicitud.',
+                cv_email_subject: 'Solicitud de CV', cv_email_body: 'Hola Emanuele,\n\nme gustaría solicitar tu CV.\n\nMe llamo: ',
+                cv_whatsapp_message: 'Hola Emanuele, me gustaría solicitar tu CV. Me llamo: ',
+                about_heading: 'Un puente entre ingeniería y gestión',
+                about_body_1: 'Mi trayectoria combina Ingeniería Biomédica e Ingeniería de Gestión. Me interesa comprender cómo funcionan los sistemas, detectar oportunidades de mejora y unir personas y tecnología para hacer realidad el cambio.',
+                about_body_2: 'Mis intereses actuales incluyen el análisis de procesos, la automatización de flujos de trabajo y herramientas de IA ejecutadas localmente. Mis experiencias académicas en Alemania han reforzado mi adaptabilidad y colaboración intercultural.',
+                projects_heading: 'Proyectos destacados',
+                projects_intro: 'Una selección de proyectos académicos y personales sobre mejora de procesos, automatización con IA, finanzas y proyectos digitales.',
+                ai_label: 'IA · Automatización · Proyecto personal', ai_title: 'AI Idea Evaluator — n8n', ai_date: '2026',
+                ai_body: 'Diseñé un flujo de trabajo n8n para evaluar ideas de negocio con un modelo de lenguaje alojado localmente. El proyecto combina orquestación con Docker, diseño de prompts para un análisis SWOT estructurado y documentación del proceso BPMN 2.0. El flujo y la implementación están disponibles en GitHub.',
+                process_title: 'Mejora de procesos municipales', process_date: 'Politecnico di Torino · 2025–2026',
+                process_body: 'En un proyecto en equipo de cinco personas, modelamos y documentamos procesos municipales con BPMN, UML y SAP Signavio. Identificamos ineficiencias y costes, y elaboramos propuestas concretas de mejora y documentación estructurada.',
+                finance_label: 'Análisis financiero', finance_title: 'Análisis de una empresa farmacéutica',
+                finance_body: 'Analicé el balance y el flujo de caja de un grupo farmacéutico internacional y presenté los resultados en un informe con análisis estructurado y recomendaciones estratégicas.',
+                cfo_label: 'Simulación empresarial · CFO', cfo_title: 'Simulación de estrategia empresarial',
+                cfo_body: 'Como CFO en una simulación con cuatro empresas y cuatro segmentos de producto, trabajé en planificación financiera, decisiones de inversión y coordinación entre funciones, evaluando las decisiones mediante KPI estratégicos.',
+                web_title: 'Sitio web multilingüe de casa vacacional', web_date: 'Proyecto familiar · En curso',
+                web_body: 'Desarrollo y mantenimiento de un sitio web multilingüe, centrado en SEO, datos estructurados e información online clara y útil.',
+                journey_heading: 'Formación & experiencia internacional',
+                msc_title: 'Máster en Ingeniería de Gestión', msc_school: 'Politecnico di Torino · Turín, Italia', msc_date: 'Sep. 2025 — Actualidad',
+                reutlingen_title: 'Intercambio Erasmus+ · Ingeniería de Gestión', reutlingen_school: 'Hochschule Reutlingen · Alemania', reutlingen_date: 'Sep. 2026 — Feb. 2027',
+                bsc_title: 'Grado en Ingeniería Biomédica', bsc_school: 'Universidad de Palermo · Italia', bsc_date: '2022 — 2025 · 110/110',
+                jena_title: 'Intercambio Erasmus+', jena_school: 'Ernst-Abbe-Hochschule Jena · Alemania', jena_date: 'Mar — Ago 2024',
+                skills_heading: 'Habilidades e idiomas', process_skills: 'Procesos y análisis', process_mapping: 'Mapeo de procesos',
+                financial_analysis: 'Análisis financiero', automation_skills: 'Automatización y tecnología', data_skills: 'Datos y ofimática',
+                technical_writing: 'Redacción técnica', teamwork: 'Trabajo en equipo', languages_heading: 'Idiomas', italian_level: 'Nativo',
+                community_label: 'Más allá de los estudios', community_heading: 'Comunidad y voluntariado',
+                community_body: 'Voluntario en Plastic Free Onlus desde 2023, colaborando en la organización y realización de más de diez jornadas de limpieza. En 2021 también fui guía multilingüe en el Museo Sant’Elia de Palermo.',
+                footer_text: '© 2026 Emanuele Ragusi',
             }
         };
 
-        const typewriterPhrases = {
-            en: ["Biomedical engineer", "M.Sc. student @ Polytechnic University of Turin", "Tech enthusiast", "Bridging MedEng & Business", "Always learning"],
-            it: ["Biomedical engineer", "M.Sc. student @ Polytechnic University of Turin", "Tech enthusiast", "Bridging MedEng & Business", "Always learning"],
-            de: ["Biomedical engineer", "M.Sc. student @ Polytechnic University of Turin", "Tech enthusiast", "Bridging MedEng & Business", "Always learning"],
-            fr: ["Biomedical engineer", "M.Sc. student @ Polytechnic University of Turin", "Tech enthusiast", "Bridging MedEng & Business", "Always learning"],
-            es: ["Biomedical engineer", "M.Sc. student @ Polytechnic University of Turin", "Tech enthusiast", "Bridging MedEng & Business", "Always learning"]
+        const languageLabels = {
+            en: '🇺🇸 EN',
+            it: '🇮🇹 IT',
+            de: '🇩🇪 DE',
+            fr: '🇫🇷 FR',
+            es: '🇪🇸 ES',
         };
-
-        let currentLang = 'en';
-
-        // --- LANGUAGE LOGIC ---
-        function toggleDropdown() {
-            const menu = document.getElementById('lang-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        function closeDropdownOnOutsideClick(event) {
-            const menu = document.getElementById('lang-menu');
-            const btn = document.getElementById('lang-btn');
-            if (!btn.contains(event.target) && !menu.contains(event.target)) {
-                menu.classList.add('hidden');
-            }
-        }
+        const langButton = document.getElementById('lang-btn');
+        const langMenu = document.getElementById('lang-menu');
+        const themeButton = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
 
         function setLanguage(lang) {
-            currentLang = lang;
-            
-            // 1. Update Translations
-            document.querySelectorAll('[data-key]').forEach(elem => {
-                const key = elem.getAttribute('data-key');
-                if (translations[lang][key]) {
-                    elem.textContent = translations[lang][key];
+            const translation = translations[lang];
+            if (!translation) return;
+
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach((element) => {
+                const key = element.getAttribute('data-i18n');
+                if (Object.prototype.hasOwnProperty.call(translation, key)) {
+                    element.textContent = translation[key];
                 }
             });
-
-            // 2. Update Button Label
-            document.getElementById('current-lang-label').textContent = translations[lang].flag;
-
-            // 3. Close Menu
-            document.getElementById('lang-menu').classList.add('hidden');
-
-            // 4. Reset Typewriter
-            isDeleting = true; 
+            document.getElementById('current-lang-label').textContent = languageLabels[lang];
+            document.getElementById('cv-email-link').href =
+                `mailto:emanueleragusi@proton.me?subject=${encodeURIComponent(translation.cv_email_subject)}&body=${encodeURIComponent(translation.cv_email_body)}`;
+            document.getElementById('cv-whatsapp-link').href =
+                `https://wa.me/393317495100?text=${encodeURIComponent(translation.cv_whatsapp_message)}`;
+            localStorage.setItem('language', lang);
+            langMenu.classList.add('hidden');
+            langButton.setAttribute('aria-expanded', 'false');
         }
 
-        // --- TYPEWRITER EFFECT ---
-        const textElement = document.getElementById('typewriter');
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typeSpeed = 100;
-
-        function type() {
-            const currentPhrasesList = typewriterPhrases[currentLang];
-            if (phraseIndex >= currentPhrasesList.length) phraseIndex = 0;
-
-            const currentPhrase = currentPhrasesList[phraseIndex];
-            
-            if (isDeleting) {
-                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
-                typeSpeed = 40; 
-            } else {
-                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
-                typeSpeed = 80;
-            }
-
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                isDeleting = true;
-                typeSpeed = 2000; 
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                phraseIndex = (phraseIndex + 1) % currentPhrasesList.length;
-                typeSpeed = 400;
-            }
-            setTimeout(type, typeSpeed);
+        function setTheme(isDark) {
+            document.documentElement.classList.toggle('dark', isDark);
+            themeButton.setAttribute('aria-pressed', String(isDark));
+            const label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+            themeButton.setAttribute('aria-label', label);
+            themeButton.title = label;
+            themeIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
 
-        document.addEventListener('DOMContentLoaded', type);
+        langButton.addEventListener('click', () => {
+            const isExpanded = langButton.getAttribute('aria-expanded') === 'true';
+            langButton.setAttribute('aria-expanded', String(!isExpanded));
+            langMenu.classList.toggle('hidden', isExpanded);
+        });
+
+        langMenu.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-lang]');
+            if (button) setLanguage(button.dataset.lang);
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!langButton.contains(event.target) && !langMenu.contains(event.target)) {
+                langMenu.classList.add('hidden');
+                langButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                langMenu.classList.add('hidden');
+                langButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        themeButton.addEventListener('click', () => {
+            const isDark = !document.documentElement.classList.contains('dark');
+            setTheme(isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        const savedLanguage = localStorage.getItem('language');
+        setLanguage(Object.prototype.hasOwnProperty.call(translations, savedLanguage) ? savedLanguage : 'en');
+        setTheme(localStorage.getItem('theme') === 'dark');
+
+        const progressBar = document.getElementById('progress-bar');
+        function updateProgress() {
+            const scrollableHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = scrollableHeight > 0 ? (window.scrollY / scrollableHeight) * 100 : 0;
+            progressBar.style.width = `${progress}%`;
+        }
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        window.addEventListener('resize', updateProgress);
+        updateProgress();
+
+        const revealElements = document.querySelectorAll('.reveal');
+        if ('IntersectionObserver' in window) {
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+            revealElements.forEach((element) => revealObserver.observe(element));
+        } else {
+            revealElements.forEach((element) => element.classList.add('active'));
+        }
     </script>
 </body>
 </html>
