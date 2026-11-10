@@ -49,35 +49,6 @@ A single-page portfolio presenting my profile, selected projects, education and 
 └── package.json
 ```
 
-## Local development
-
-Requirements: [Node.js](https://nodejs.org/) and npm.
-
-```bash
-git clone https://github.com/emanueleragusi/emanueleragusi.github.io.git
-cd emanueleragusi.github.io
-npm install
-```
-
-Rebuild the CSS after changing `src/input.css` or the Tailwind classes in the HTML files:
-
-```bash
-npm run build:css
-```
-
-Preview locally:
-
-```bash
-python3 -m http.server 8000
-```
-
-Then open `http://localhost:8000`.
-
-> The compiled `assets/css/styles.css` is committed, so the site works on GitHub Pages without a build step.
-
-## Deployment
-
-Pushes to the default branch are published automatically by GitHub Pages. Remember to run `npm run build:css` and commit the updated `styles.css` before pushing.
 
 ## Contact
 
